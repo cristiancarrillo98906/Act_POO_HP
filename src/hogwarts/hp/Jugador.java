@@ -1,5 +1,6 @@
 package hogwarts.hp;
 
+import javax.print.DocFlavor;
 import java.util.ArrayList;
 
 public class Jugador extends Personaje{
@@ -32,13 +33,19 @@ public class Jugador extends Personaje{
 
     @Override
     public void atacar(Personaje enemigo, int hechizo) {
-        if (hechizo < 0 && hechizo >3){
-            System.out.println("El hechizo no existe tonto !");
+        if (hechizo < 0 || hechizo >3){
+            System.out.println("El hechizo no existe, muggle!");
+        } else if (hechizos.get(energia).getEnergia() > this.energia){
+            System.out.println("No tienes suficiente energía para usar el hechizo " + hechizos.get(Integer.parseInt(nombre)));
+        } else {
+            this.energia = this.energia - hechizos.get(energia).getEnergia();
+            enemigo.recibirDanyo(hechizos.get(hechizo).getDanyo());
+            System.out.println(nombre + " lanza " + hechizos.get(hechizo).getNombre() + ", causando " + hechizos.get(hechizo).getDanyo() + " de daño a " + enemigo.getNombre());
+            hechizosLanzadosTotal++;
         }
     }
 
     @Override
     public void recibirDanyo(int valorDanyo) {
-
     }
 }
