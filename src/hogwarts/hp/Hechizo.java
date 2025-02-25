@@ -27,6 +27,6 @@ public class Hechizo {
 
     @Override
     public String toString(){
-        return this.nombre + " [Energía: " + this.energia + "]" + " [Daño: " + this.danyo + "]";
+        return this.nombre + " [Energía: " + this.energia + "] " + " [Daño: " + this.danyo + "]";
     }
 }

@@ -2,16 +2,17 @@ package hogwarts.hp;
 
 import javax.print.DocFlavor;
 import java.util.ArrayList;
+import java.util.Scanner;
 
-public class Jugador extends Personaje{
+public class Jugador extends Personaje implements Atacante{
     private int energia;
     private String fraseFavorita;
     private ArrayList<Hechizo> hechizos;
     private static int hechizosLanzadosTotal = 0;
 
-    public Jugador(String nombre, int salud, String fraseFavorita) {
-        super(nombre, salud);
-        this.salud = 100;
+    public Jugador(String nombre, String fraseFavorita) {
+        super(nombre, 100);
+        //this.salud = 100;
         this.energia = 50;
         this.fraseFavorita = fraseFavorita;
         this.hechizos = new ArrayList<>();
@@ -28,24 +29,54 @@ public class Jugador extends Personaje{
 
     @Override
     public void lanzarFraseFavorita() {
-
+        System.out.println(this.fraseFavorita);
     }
 
     @Override
     public void atacar(Personaje enemigo, int hechizo) {
-        if (hechizo < 0 || hechizo >3){
+        Scanner scan = new Scanner(System.in);
+        while (hechizo < 0 || hechizo >= hechizos.size()){
             System.out.println("El hechizo no existe, muggle!");
-        } else if (hechizos.get(energia).getEnergia() > this.energia){
-            System.out.println("No tienes suficiente energía para usar el hechizo " + hechizos.get(Integer.parseInt(nombre)));
+            hechizo = scan.nextInt() -1 ;
+        }
+
+        Hechizo hechizoSeleccionado = hechizos.get(hechizo);
+
+        if (hechizoSeleccionado.getEnergia() > this.energia){
+            System.out.println("No tienes suficiente energía para usar " + hechizoSeleccionado.getNombre() + ", sangre sucia");
         } else {
-            this.energia = this.energia - hechizos.get(energia).getEnergia();
-            enemigo.recibirDanyo(hechizos.get(hechizo).getDanyo());
-            System.out.println(nombre + " lanza " + hechizos.get(hechizo).getNombre() + ", causando " + hechizos.get(hechizo).getDanyo() + " de daño a " + enemigo.getNombre());
+            this.energia = this.energia - hechizoSeleccionado.getEnergia();
+            enemigo.recibirDanyo(hechizoSeleccionado.getDanyo());
+            System.out.println(this.nombre + " realiza " + hechizoSeleccionado.getNombre() + " haciendo un daño de " + hechizoSeleccionado.getDanyo() + " a " + enemigo.nombre);
             hechizosLanzadosTotal++;
         }
     }
 
-    @Override
     public void recibirDanyo(int valorDanyo) {
+    this.salud = this.salud - valorDanyo;
+    if (this.salud < 0){
+        this.salud = 0;
+        }
     }
+
+    public void recuperarEnergia() {
+        this.energia = this.energia + 15;
+        System.out.println(this.nombre + " recupera " + 15 + " puntos de energía");
+    }
+
+    public String toString(){
+        return this.nombre + " [Salud: " + this.salud + "] [Energía: " + this.energia + "]";
+    }
+
+    public void mostrarHechizos() {
+        System.out.println(" - - - - - - - Hechizos Disponibles - - - - - - - ");
+        for (int i = 0; i < hechizos.size(); i++){
+            System.out.println((i + 1) + " - " + hechizos.get(i).toString());
+        }
+    }
+
+    public static void mostrarHechizosLanzados() {
+        System.out.println("Se lanzaron un total de " + hechizosLanzadosTotal + " hechizos.");
+    }
+
 }

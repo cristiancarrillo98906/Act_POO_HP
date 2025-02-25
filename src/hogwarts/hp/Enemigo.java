@@ -9,7 +9,10 @@ public class Enemigo extends Personaje{
         super(nombre, salud);
         this.fuerza = fuerza;
     }
+    public int getFuerza() {
+        return fuerza;
 
+    }
     @Override
     public void lanzarFraseFavorita() {
         System.out.println("Buuaajajajajajajajajajajaja");
@@ -24,11 +27,19 @@ public class Enemigo extends Personaje{
     @Override
     public void atacar(Personaje enemigo, int fuerza) {
         System.out.println(this.nombre + " lanza a " + enemigo.nombre + " causando " + this.fuerza + " de daño");
-
+        enemigo.recibirDanyo(fuerza);
     }
 
     @Override
     public void recibirDanyo(int valorDanyo) {
+    this.salud = this.salud - valorDanyo;
+    if (this.salud <= 0) {
+        enemigosDerrotados++;
+        }
+    }
 
+    @Override
+    public String toString() {
+        return super.toString() + " [Fuerza: " + this.fuerza + "] ";
     }
 }
